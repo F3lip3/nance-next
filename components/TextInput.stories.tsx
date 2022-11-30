@@ -7,6 +7,7 @@ export default {
   component: TextInput.Root,
   args: {
     children: [
+      // eslint-disable-next-line react/jsx-key
       <TextInput.Icon>
         <Envelope />
       </TextInput.Icon>,
