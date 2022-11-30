@@ -1,7 +1,12 @@
 NANCE
 
-Design System [https://nance-ds.vercel.app/](https://nance-ds.vercel.app/)
-Web application [https://nance-next.vercel.app/](https://nance-next.vercel.app/)
+---
+
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+
+Design System: [https://nance-ds.vercel.app/](https://nance-ds.vercel.app/)
+
+Web application: [https://nance-next.vercel.app/](https://nance-next.vercel.app/)
 
 ---
 

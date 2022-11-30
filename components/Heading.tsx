@@ -20,7 +20,7 @@ export const Heading = ({
   return (
     <Comp
       className={clsx(
-        'text-gray-100 font-bold font-sans',
+        'text-gray-100 font-bold font-sans antialiased',
         {
           'text-xl': size === 'sm',
           'text-2xl': size === 'md',
