@@ -20,7 +20,7 @@ export const Text = ({
   return (
     <Comp
       className={clsx(
-        'text-gray-100 font-sans',
+        'text-gray-100 font-sans antialiased',
         {
           'text-xs': size === 'xs',
           'text-sm': size === 'sm',

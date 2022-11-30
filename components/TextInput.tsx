@@ -36,6 +36,7 @@ const TextInputComponent = (props: TextInputProps) => {
   return (
     <input
       className="bg-transparent flex-1 text-gray-100 text-sm placeholder:text-gray-400 outline-none"
+      autoComplete="off"
       {...props}
     />
   );
