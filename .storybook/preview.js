@@ -1,6 +1,6 @@
 import { themes } from '@storybook/theming';
 import * as NextImage from 'next/image';
-import '../styles/globals.css';
+import '../src/styles/globals.css';
 
 const OriginalNextImage = NextImage.default;
 
