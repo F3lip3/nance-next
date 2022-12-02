@@ -7,7 +7,6 @@ export default {
   component: TextInput.Root,
   args: {
     children: [
-      // eslint-disable-next-line react/jsx-key
       <TextInput.Icon>
         <Envelope />
       </TextInput.Icon>,
@@ -28,5 +27,17 @@ export const Default: StoryObj<TextInputRootProps> = {};
 export const WithoutIcon: StoryObj<TextInputRootProps> = {
   args: {
     children: <TextInput.Input placeholder="Type anything here" />
+  }
+};
+
+export const WithError: StoryObj<TextInputRootProps> = {
+  args: {
+    children: [
+      <TextInput.Icon>
+        <Envelope />
+      </TextInput.Icon>,
+      <TextInput.Input placeholder="Type anything here" />
+    ],
+    error: 'Something went wrong!'
   }
 };

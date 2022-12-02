@@ -25,4 +25,10 @@
     -webkit-box-shadow: 0 0 0px 1000px theme('backgroundColor.gray.800') inset;
     transition: background-color 5000s ease-in-out 0s;
   }
+
+  input,
+  textarea,
+  select {
+    transition: all 0.3s ease-in-out 0s;
+  }
 }
