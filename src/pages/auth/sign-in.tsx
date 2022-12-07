@@ -5,15 +5,17 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { Button } from '../../components/Button';
 import { Checkbox } from '../../components/Checkbox';
 import { Heading } from '../../components/Heading';
-import { Loading } from '../../components/Loading';
 import { Logo } from '../../components/Logo';
 import { Text } from '../../components/Text';
 import { TextInput } from '../../components/TextInput';
+import { useToast } from '../../hooks/useToast';
 import { SignInInput, signInSchema } from '../../server/schemas/user.schema';
-import { trpc } from '../../utils/trpc';
+import { isTRPCClientError, trpc } from '../../utils/trpc';
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
+
+  const { addToast } = useToast();
 
   const { mutateAsync: signIn } = trpc.user.signIn.useMutation();
 
@@ -26,14 +28,36 @@ export default function SignIn() {
   });
 
   const onSubmit: SubmitHandler<SignInInput> = async data => {
-    setLoading(true);
     try {
+      setLoading(true);
+
       const user = await signIn(data);
       console.info(user);
     } catch (err) {
-      console.error(err);
+      if (isTRPCClientError(err)) {
+        switch (err.message) {
+          case 'INVALID_EMAIL_OR_PASSWORD':
+            addToast({
+              message: 'Falha na autenticação!',
+              description: 'Email ou senha inválidos!',
+              variant: 'error'
+            });
+            return;
+          default:
+            break;
+        }
+      }
+
+      addToast({
+        message: 'Falha na autenticação!',
+        description:
+          'Ocorreu um erro ao autenticar. Tente novamente mais tarde!',
+        variant: 'error'
+      });
+      console.error('Generic error:', err);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -93,8 +117,9 @@ export default function SignIn() {
           type="submit"
           className="mt-4"
           disabled={isSubmitting || loading}
+          loading={isSubmitting || loading}
         >
-          {isSubmitting || loading ? <Loading /> : 'Entrar na plataforma'}
+          Entrar na plataforma
         </Button>
       </form>
 

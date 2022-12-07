@@ -12,7 +12,7 @@ export const userRouter = router({
     if (!user) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'Invalid email or password'
+        message: 'INVALID_EMAIL_OR_PASSWORD'
       });
     }
 
@@ -20,7 +20,7 @@ export const userRouter = router({
     if (!validPassword) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
-        message: 'Invalid email or password'
+        message: 'INVALID_EMAIL_OR_PASSWORD'
       });
     }
 

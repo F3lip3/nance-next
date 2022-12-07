@@ -27,14 +27,27 @@ module.exports = {
         800: '#202024',
         900: '#121214'
       },
+      green: {
+        400: '#4C7b54',
+        700: '#0F484F'
+      },
       transparent: 'transparent',
       white: '#fff'
     },
     extend: {
       fontFamily: {
         sans: 'Inter, sans-serif'
+      },
+      gridTemplateAreas: {
+        toast: ['title action', 'description action']
+      },
+      gridTemplateColumns: {
+        toast: 'auto max-content'
+      },
+      gridTemplateRows: {
+        toast: 'auto auto'
       }
     }
   },
-  plugins: []
+  plugins: [require('@savvywombat/tailwindcss-grid-areas')]
 };

@@ -1,4 +1,4 @@
-import { httpBatchLink } from '@trpc/client';
+import { httpBatchLink, TRPCClientError } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import type { AppRouter } from '../server/routers/_app';
 
@@ -11,6 +11,12 @@ function getBaseUrl() {
     return `http://${process.env.RENDER_INTERNAL_HOSTNAME}:${process.env.PORT}`;
 
   return `http://localhost:${process.env.PORT ?? 3000}`;
+}
+
+export function isTRPCClientError(
+  cause: unknown
+): cause is TRPCClientError<AppRouter> {
+  return cause instanceof TRPCClientError;
 }
 
 export const trpc = createTRPCNext<AppRouter>({

@@ -1,15 +1,26 @@
 import { Slot } from '@radix-ui/react-slot';
 import clsx from 'clsx';
+import { CircleNotch } from 'phosphor-react';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
   asChild?: boolean;
+  loading?: boolean;
 }
+
+const Loading = () => {
+  return (
+    <div className="w-6 h-6 flex items-center justify-center gap-2 overflow-hidden">
+      <CircleNotch weight="bold" className="w-4 h-4 animate-spin" />
+    </div>
+  );
+};
 
 export const Button = ({
   children,
   asChild,
+  loading,
   className,
   ...props
 }: ButtonProps) => {
@@ -23,7 +34,7 @@ export const Button = ({
       )}
       {...props}
     >
-      {children}
+      {loading ? <Loading /> : children}
     </Comp>
   );
 };
