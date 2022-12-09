@@ -1,6 +1,8 @@
 import { TRPCError } from '@trpc/server';
+import { sign } from 'jsonwebtoken';
+import { AuthConfig } from '../../config/auth';
 import { crypto } from '../helpers/crypto';
-import { signInSchema } from '../schemas/user.schema';
+import { signInSchema } from '../schemas/auth.schema';
 import { procedure, router } from '../trpc';
 
 export const userRouter = router({
@@ -24,6 +26,13 @@ export const userRouter = router({
       });
     }
 
-    return user;
+    const { secret, expiresIn } = AuthConfig.jwt;
+    const subject = `${user.id}:${user.email}`;
+    const jwtToken = sign({}, secret, {
+      subject,
+      expiresIn
+    });
+
+    return { user, token: jwtToken };
   })
 });

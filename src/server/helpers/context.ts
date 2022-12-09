@@ -1,8 +1,18 @@
 import { inferAsyncReturnType } from '@trpc/server';
-import { prisma } from '../../utils/prisma';
+import * as trpcNext from '@trpc/server/adapters/next';
+import { unstable_getServerSession } from 'next-auth';
+import { nextAuthOptions } from '../../common/auth';
+import { prisma } from '../../common/prisma';
 
-export async function createContext() {
+export async function createContext({
+  req,
+  res
+}: trpcNext.CreateNextContextOptions) {
+  const session = await unstable_getServerSession(req, res, nextAuthOptions);
   return {
+    req,
+    res,
+    session,
     prisma
   };
 }

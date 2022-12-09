@@ -1,43 +1,42 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { Envelope, Key } from 'phosphor-react';
+import { Envelope, Key, User } from 'phosphor-react';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { isTRPCClientError } from '../../common/trpc';
+import { isTRPCClientError, trpc } from '../../common/trpc';
 import { Button } from '../../components/Button';
-import { Checkbox } from '../../components/Checkbox';
 import { Heading } from '../../components/Heading';
 import { Logo } from '../../components/Logo';
 import { Text } from '../../components/Text';
 import { TextInput } from '../../components/TextInput';
 import { useToast } from '../../hooks/useToast';
-import { SignInInput, signInSchema } from '../../server/schemas/auth.schema';
+import { SignUpInput, signUpSchema } from '../../server/schemas/auth.schema';
 
 export default function SignIn() {
   const [loading, setLoading] = useState(false);
 
   const { addToast } = useToast();
 
+  const { mutateAsync: signUp } = trpc.auth.signUp.useMutation();
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting }
-  } = useForm<SignInInput>({
-    resolver: zodResolver(signInSchema)
+  } = useForm<SignUpInput>({
+    resolver: zodResolver(signUpSchema)
   });
 
-  const onSubmit: SubmitHandler<SignInInput> = async data => {
+  const onSubmit: SubmitHandler<SignUpInput> = async data => {
     try {
       setLoading(true);
 
-      const user = await signIn(
-        'credentials',
-        {
-          ...data,
-          callbackUrl: '/'
-        },
-        []
-      );
+      const user = await signUp(data, {
+        onSuccess({ data, message, status }) {
+          console.info(data);
+          console.info(message);
+          console.info(status);
+        }
+      });
       console.info(user);
     } catch (err) {
       if (isTRPCClientError(err)) {
@@ -74,7 +73,7 @@ export default function SignIn() {
           Nance
         </Heading>
         <Text size="lg" className="text-gray-400">
-          Faça login e comece a usar!
+          Cadastre-se agora!
         </Text>
       </header>
 
@@ -82,6 +81,21 @@ export default function SignIn() {
         className="flex flex-col items-stretch w-full max-w-sm mt-10 gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <label htmlFor="name" className="flex flex-col gap-3">
+          <Text className="font-semibold">Seu nome</Text>
+          <TextInput.Root error={errors.name?.message}>
+            <TextInput.Icon>
+              <User />
+            </TextInput.Icon>
+            <TextInput.Input
+              id="name"
+              type="text"
+              placeholder="Informe seu nome"
+              {...register('name')}
+            />
+          </TextInput.Root>
+        </label>
+
         <label htmlFor="email" className="flex flex-col gap-3">
           <Text className="font-semibold">Endereço de e-mail</Text>
           <TextInput.Root error={errors.email?.message}>
@@ -112,32 +126,20 @@ export default function SignIn() {
           </TextInput.Root>
         </label>
 
-        <label htmlFor="remember" className="flex items-center gap-2">
-          <Checkbox id="remember" />
-          <Text size="sm" className="text-gray-200">
-            Manter acesso por 30 dias
-          </Text>
-        </label>
-
         <Button
           type="submit"
           className="mt-4"
           disabled={isSubmitting || loading}
           loading={isSubmitting || loading}
         >
-          Entrar na plataforma
+          Criar conta
         </Button>
       </form>
 
       <footer className="flex flex-col items-center gap-4 mt-8">
         <Text asChild size="xs" className="text-gray-400 hover:text-gray-200">
           <a href="#" className="underline">
-            Esqueceu sua senha?
-          </a>
-        </Text>
-        <Text asChild size="xs" className="text-gray-400 hover:text-gray-200">
-          <a href="#" className="underline">
-            Não possui conta? Crie uma agora!
+            Já possui uma conta? Faça o login!
           </a>
         </Text>
       </footer>
