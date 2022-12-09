@@ -38,7 +38,6 @@ export default function SignIn() {
         },
         []
       );
-      console.info(user);
     } catch (err) {
       if (isTRPCClientError(err)) {
         switch (err.message) {

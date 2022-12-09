@@ -22,12 +22,9 @@ export const nextAuthOptions: NextAuthOptions = {
       },
       authorize: async (credentials, request) => {
         const data = await signInSchema.parseAsync(credentials);
-        console.info('AUTHORIZE DATA:', data);
         const user = await prisma.user.findUnique({
           where: { email: data.email }
         });
-
-        console.info('USER', user);
 
         if (!user) return null;
 
@@ -35,8 +32,6 @@ export const nextAuthOptions: NextAuthOptions = {
           data.password,
           user.password
         );
-
-        console.info('VALID?', isValidPassword);
 
         if (!isValidPassword) return null;
 
@@ -50,7 +45,6 @@ export const nextAuthOptions: NextAuthOptions = {
   ],
   callbacks: {
     jwt: async ({ token, user }) => {
-      console.info('callback jwt:', token, user);
       if (user) {
         token.sub = user.id;
         token.email = user.email;
@@ -61,7 +55,6 @@ export const nextAuthOptions: NextAuthOptions = {
       return token;
     },
     session: async ({ session, token }) => {
-      console.info('callback session:', session, token);
       if (token) {
         session.user = {
           email: token.email,
@@ -87,8 +80,6 @@ export const requireAuth =
       ctx.res,
       nextAuthOptions
     );
-
-    console.info('SESSION', session);
 
     if (!session) {
       return {
