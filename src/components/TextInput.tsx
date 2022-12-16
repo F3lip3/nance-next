@@ -9,9 +9,13 @@ export interface TextInputRootProps {
 
 export interface TextInputIconProps {
   children: ReactNode;
+  size?: 'sm' | 'md' | 'lg';
 }
 
-export interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {}
+export interface TextInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  size?: 'sm' | 'md' | 'lg';
+}
 
 const TextInputRoot = ({ children, error }: TextInputRootProps) => {
   return (
@@ -36,15 +40,32 @@ const TextInputRoot = ({ children, error }: TextInputRootProps) => {
   );
 };
 
-const TextInputIcon = ({ children }: TextInputIconProps) => {
-  return <Slot className="w-6 h-6 text-gray-400">{children}</Slot>;
+const TextInputIcon = ({ children, size = 'md' }: TextInputIconProps) => {
+  return (
+    <Slot
+      className={clsx('text-gray-400', {
+        'w-4 h-4': size === 'sm',
+        'w-8 h-8': size === 'md',
+        'w-12 h-12 pr-4': size === 'lg'
+      })}
+    >
+      {children}
+    </Slot>
+  );
 };
 
 const TextInputComponent = forwardRef<HTMLInputElement, TextInputProps>(
-  (props, ref) => {
+  ({ size = 'md', ...props }, ref) => {
     return (
       <input
-        className="bg-transparent flex-1 text-gray-100 text-sm placeholder:text-gray-400 outline-none"
+        className={clsx(
+          'bg-transparent flex-1 text-gray-100 placeholder:text-gray-400 outline-none',
+          {
+            'text-xs': size === 'sm',
+            'text-sm': size === 'md',
+            'text-xl px-4': size === 'lg'
+          }
+        )}
         ref={ref}
         {...props}
       />

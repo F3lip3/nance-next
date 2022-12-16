@@ -1,11 +1,11 @@
 import { procedure, router } from '../trpc';
 import { authRouter } from './auth';
-import { userRouter } from './user';
+import { symbolsRouter } from './symbols';
 
 export const appRouter = router({
   health: procedure.query(() => 'yay!'),
-  user: userRouter,
-  auth: authRouter
+  auth: authRouter,
+  symbols: symbolsRouter
 });
 
 export type AppRouter = typeof appRouter;
